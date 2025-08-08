@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Atardecer ama</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="scene">
+    <div class="sky" id="sky"></div>
+    <div class="sun" id="sun"></div>
+
+    <!-- Nubes: una pasada de izquierda a derecha por cada noche -->
+    <div class="clouds" id="clouds">
+      <div class="cloud" style="top:6vh"></div>
+      <div class="cloud" style="top:10vh;left:350px;opacity:.9"></div>
+      <div class="cloud" style="top:14vh;left:700px;opacity:.85"></div>
+    </div>
+
+    <!-- Capa de estrellas y meteoros -->
+    <div class="stars" id="stars"></div>
+
+    <!-- Mar con olas SVG -->
+    <div class="ocean-wrap">
+      <svg class="ocean" viewBox="0 0 1000 600" preserveAspectRatio="none">
+        <defs>
+          <!-- Gradientes internos para evitar olas negras -->
+          <linearGradient id="waveGrad1" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%"  stop-color="#b5d8f5" stop-opacity="0.65"/>
+            <stop offset="100%" stop-color="#8ec7ee" stop-opacity="0.35"/>
+          </linearGradient>
+          <linearGradient id="waveGrad2" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%"  stop-color="#8cbfe4" stop-opacity="0.55"/>
+            <stop offset="100%" stop-color="#6ca7d4" stop-opacity="0.30"/>
+          </linearGradient>
+          <linearGradient id="waveGrad3" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%"  stop-color="#6ca7d4" stop-opacity="0.45"/>
+            <stop offset="100%" stop-color="#4c88b8" stop-opacity="0.25"/>
+          </linearGradient>
+        </defs>
+        <path id="wave1" fill="url(#waveGrad1)"></path>
+        <path id="wave2" fill="url(#waveGrad2)"></path>
+        <path id="wave3" fill="url(#waveGrad3)"></path>
+      </svg>
+      <div class="reflection" id="reflection"></div>
+    </div>
+
+    <div class="shore-foam"></div>
+    <div class="sand"></div>
+  </div>
+
+  <script src="Java.js" defer></script>
+</body>
+</html>
