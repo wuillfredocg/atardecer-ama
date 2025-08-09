@@ -1,17 +1,12 @@
 :root{
-  /* Cielo base */
   --day-top:#73b3ff; --day-mid:#ffd9a6; --day-low:#ffe7c4;
 
-  /* Atardecer dorado/naranja */
   --sunset-top:#6a7fd0; --sunset-mid:#ff8f3a; --sunset-low:#ffb85c;
 
-  /* Crepúsculo (azul medio) */
   --twilight-top:#37406a; --twilight-mid:#2a335a; --twilight-low:#1f274a;
 
-  /* Noche: azul oscuro más profundo (pedido) */
   --night-top:#020815; --night-mid:#061225; --night-low:#0b1e3a;
 
-  /* Arena */
   --sand-light:#f3d7a4; --sand-mid:#e2c086; --sand-dark:#caa066;
 
   --text:#fff;
@@ -23,7 +18,6 @@ body{background:#000;color:var(--text);overflow:hidden;font-family:system-ui,Seg
 
 .scene{position:relative;height:100vh;width:100%}
 
-/* CIELO */
 .sky{position:absolute;inset:0;z-index:0}
 .sun{
   position:absolute;left:50%;width:220px;height:220px;margin-left:-110px;border-radius:50%;
@@ -31,7 +25,6 @@ body{background:#000;color:var(--text);overflow:hidden;font-family:system-ui,Seg
   box-shadow:0 0 60px 28px rgba(255,190,120,.40),0 0 140px 50px rgba(255,140,90,.22)
 }
 
-/* NUBES: una pasada por noche */
 .clouds{position:absolute;top:6vh;left:-120%;width:120%;height:38vh;pointer-events:none;z-index:3;opacity:0}
 .cloud{
   position:absolute;width:320px;height:110px;border-radius:100px;
@@ -45,7 +38,6 @@ body{background:#000;color:var(--text);overflow:hidden;font-family:system-ui,Seg
   to{left:100%;opacity:0}
 }
 
-/* ESTRELLAS Y METEOROS */
 .stars{position:absolute;inset:0;pointer-events:none;z-index:2}
 .star{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;opacity:0}
 .meteor{
@@ -57,21 +49,18 @@ body{background:#000;color:var(--text);overflow:hidden;font-family:system-ui,Seg
   background:linear-gradient(90deg,transparent,rgba(255,255,255,.95));filter:blur(.6px)
 }
 
-/* MAR */
 .ocean-wrap{position:absolute;bottom:0;left:0;right:0;height:55vh;overflow:hidden;z-index:1}
 svg.ocean{
   width:100%;height:100%;display:block;
   background:linear-gradient(180deg,#6bb7e6 0%,#1c6fa6 22%,#0f3c5f 58%,#07223d 100%)
 }
 
-/* REFLEJO DEL SOL */
 .reflection{
   position:absolute;left:50%;bottom:36vh;width:34vw;max-width:540px;height:26vh;transform:translateX(-50%);
   pointer-events:none;opacity:0;transition:opacity .4s;
   background:radial-gradient(ellipse at 50% 0%,rgba(255,190,100,.78) 0%,rgba(255,190,100,.38) 28%,rgba(255,190,100,.12) 60%,transparent 82%)
 }
 
-/* ESPUMA Y ARENA */
 .shore-foam{
   position:absolute;left:0;right:0;bottom:12vh;height:3vh;pointer-events:none;z-index:4;
   background:radial-gradient(120% 200% at 50% 0%, rgba(255,255,255,.50), rgba(255,255,255,.18) 45%, transparent 70%)
