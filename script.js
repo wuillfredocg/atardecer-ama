@@ -1,11 +1,9 @@
-// ===== Parámetros =====
-const DURATION = 150000;          // ~2.5 min por ciclo
-const TWILIGHT_START = 0.55;      // inicio azul crepuscular
-const NIGHT_START = 0.78;         // noche (meteoros sólo aquí)
-const METEOR_BURST_MS = 6000;     // lluvia 6s cada noche
-const HORIZON_VH = 45;            // horizonte aprox
+const DURATION = 150000;
+const TWILIGHT_START = 0.55;
+const NIGHT_START = 0.78;
+const METEOR_BURST_MS = 6000;
+const HORIZON_VH = 45;   
 
-// ===== Elementos =====
 const sky = document.getElementById('sky');
 const sun = document.getElementById('sun');
 const starsWrap = document.getElementById('stars');
@@ -15,22 +13,19 @@ const w1 = document.getElementById('wave1');
 const w2 = document.getElementById('wave2');
 const w3 = document.getElementById('wave3');
 
-// ===== Helpers de color =====
 function lerp(a,b,t){ return a + (b-a)*t; }
 function hexToRgb(h){ h=h.replace('#',''); if(h.length===3){h=[h[0]+h[0],h[1]+h[1],h[2]+h[2]].join('')} const n=parseInt(h,16); return {r:(n>>16)&255,g:(n>>8)&255,b:n&255}; }
 function rgbToHex({r,g,b}){ const f=x=>x.toString(16).padStart(2,'0'); return `#${f(r)}${f(g)}${f(b)}`; }
 function mix(c1,c2,t){ const a=hexToRgb(c1), b=hexToRgb(c2); return rgbToHex({r:Math.round(lerp(a.r,b.r,t)), g:Math.round(lerp(a.g,b.g,t)), b:Math.round(lerp(a.b,b.b,t))}); }
 function smoothstep(e0,e1,x){ const t=Math.max(0,Math.min(1,(x-e0)/(e1-e0))); return t*t*(3-2*t); }
 
-// Paletas
 const pal = {
   day:      ['#73b3ff','#ffd9a6','#ffe7c4'],
   sunset:   ['#6a7fd0','#ff8f3a','#ffb85c'],
   twilight: ['#37406a','#2a335a','#1f274a'],
-  night:    ['#020815','#061225','#0b1e3a'] // azul noche más oscuro
+  night:    ['#020815','#061225','#0b1e3a'] 
 };
 
-// ===== Estrellas fijas =====
 const STARS = 160; const stars = [];
 for(let i=0;i<STARS;i++){
   const s = document.createElement('div');
@@ -42,7 +37,6 @@ for(let i=0;i<STARS;i++){
   stars.push(s);
 }
 
-// ===== Meteoritos (sólo de noche, cada noche) =====
 let meteorBurstStart=0, nextMeteorAt=0, meteorBurstActive=false;
 function spawnMeteor(){
   const m=document.createElement('div'); m.className='meteor';
@@ -61,7 +55,6 @@ function inMeteorBurst(now){
   return now>=burstStart && now<=burstStart+METEOR_BURST_MS;
 }
 
-// ===== Olas (SVG) =====
 function wavePath(amplitude,wavelength,phase,height){
   const W=1000, H=600, yBase=H*height; const pts=[];
   for(let x=0;x<=W;x+=20){
@@ -73,20 +66,17 @@ function wavePath(amplitude,wavelength,phase,height){
   return `M0,${H} L0,${pts[0].split(',')[1]} L ${pts.join(' ')} L ${W},${H} Z`;
 }
 
-// ===== Nubes (una pasada por noche) =====
 let lastCloudCycle=-1;
 
 function tick(now){
-  const t = (now % DURATION) / DURATION; // 0..1 continuo
+  const t = (now % DURATION) / DURATION;
   const cycle = Math.floor(now / DURATION);
 
-  // Movimiento del sol
   const sunProgress = Math.min(1, t*1.05);
   const easeOut = x=>1-Math.pow(1-x,2);
   const yvh = lerp(-12,70,easeOut(sunProgress));
   sun.style.top = yvh + 'vh';
 
-  // Cielo: día -> atardecer -> crepúsculo -> noche (suave)
   let top, mid, low, warmBand;
   if(t < TWILIGHT_START){
     const k = smoothstep(0,1, t/TWILIGHT_START);
@@ -110,11 +100,9 @@ function tick(now){
   const horizonWarm = mix(low, '#ffb45a', Math.min(1,warmBand));
   sky.style.background = `linear-gradient(180deg, ${top}, ${mid} 40%, ${horizonWarm} 62%, ${low} 82%)`;
 
-  // Reflejo del sol
   const sunVisible = yvh < (HORIZON_VH+2);
   reflection.style.opacity = sunVisible ? 0.95 : Math.max(0.06, warmBand*0.15);
 
-  // Estrellas (sólo de noche)
   const starVis = Math.max(0,(t-(NIGHT_START-0.08))*6);
   for(const s of stars){
     const f=parseFloat(s.dataset.f);
@@ -122,7 +110,6 @@ function tick(now){
     s.style.opacity = Math.min(1, starVis) * tw;
   }
 
-  // Nubes: una pasada por cada noche
   if(t > NIGHT_START && lastCloudCycle !== cycle){
     clouds.style.animation='cloudPass 120s linear 1 forwards';
     clouds.style.opacity='0.85';
@@ -134,7 +121,6 @@ function tick(now){
     clouds.style.opacity='0';
   }
 
-  // Lluvia de estrellas: sólo en la noche y en cada noche
   if(inMeteorBurst(now) && !meteorBurstActive){
     meteorBurstActive = true;
     meteorBurstStart = now;
@@ -144,14 +130,13 @@ function tick(now){
     if(inMeteorBurst(now)){
       if(now >= nextMeteorAt){
         spawnMeteor();
-        nextMeteorAt = now + 240 + Math.random()*260; // una tras otra
+        nextMeteorAt = now + 240 + Math.random()*260;
       }
     }else{
       meteorBurstActive = false;
     }
   }
 
-  // Olas animadas
   const p = now/1000;
   w1.setAttribute('d', wavePath(14,110,p*120,0.30));
   w2.setAttribute('d', wavePath(22,170,p*70, 0.42));
