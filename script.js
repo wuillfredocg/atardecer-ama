@@ -1,4 +1,4 @@
-const DURATION = 150000;
+const DURATION = 15000;
 const TWILIGHT_START = 0.55;
 const NIGHT_START = 0.78;
 const METEOR_BURST_MS = 6000;
